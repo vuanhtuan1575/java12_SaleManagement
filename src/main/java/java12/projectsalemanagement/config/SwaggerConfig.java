@@ -25,11 +25,11 @@ public class SwaggerConfig {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2).securityContexts(Arrays.asList(securityContext()))
                 .securitySchemes(Arrays.asList(apiKey())).select()
-                .apis(RequestHandlerSelectors.basePackage("cybersoft.java12.gira")).build().apiInfo(apiInfo());
+                .apis(RequestHandlerSelectors.basePackage("java12.projectsalemanagement")).build().apiInfo(apiInfo());
     }
 
     private ApiInfo apiInfo() {
-        return new ApiInfoBuilder().title("Cybersoft Gira Application")
+        return new ApiInfoBuilder().title("Sale Management Application")
                 .description("This project is used for education purpose only.")
                 .contact(new Contact("Tu Quang Huy", ".dev", "contact@huy.dev")).license("MIT2").build();
     }
