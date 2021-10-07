@@ -1,0 +1,1 @@
+spring:  datasource:    url: jdbc:postgresql://localhost:5432/sale-management    username: postgres    password: pgAdmin  jpa:    show-sql: true    generate-ddl: true    hibernate:      ddl-auto: create-drop  jackson:    serialization:       fail-on-empty-beans: false                          
