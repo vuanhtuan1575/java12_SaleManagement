@@ -64,8 +64,12 @@ public class User extends BaseEntity {
     private Set<Order> orders = new HashSet<>();
 
 
-//    // relationship user-carts 1-1
+//   // relationship user-carts 1-1
 //    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 //    private Cart cart;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @PrimaryKeyJoinColumn
+    private Cart cart;
 
 }

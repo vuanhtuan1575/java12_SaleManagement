@@ -22,7 +22,7 @@ import java.util.Set;
 @Entity
 @Table(name = "cart")
 public class Cart extends BaseEntity {
-//    //user - cart 1-1
+//user - cart 1-1
 //    @OneToOne
 //    @JoinColumn(name = "id",referencedColumnName = "user_id") // Liên kết với nhau qua khóa ngoại user_id
 //    private User user;
@@ -32,5 +32,11 @@ public class Cart extends BaseEntity {
     @Builder.Default
     @ManyToMany(mappedBy = "carts", fetch = FetchType.LAZY)
     private Set<Product> products = new HashSet<>();
+
+    // relation: user -cart 1-1
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    @JsonIgnore
+    private User user;
 
 }
