@@ -1,12 +1,63 @@
 package java12.projectsalemanagement.product.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import java12.projectsalemanagement.common.util.ResponseHandler;
+import java12.projectsalemanagement.product.dto.CreateProductDto;
+import java12.projectsalemanagement.product.dto.UpdateProductDto;
+import java12.projectsalemanagement.product.entity.Product;
+import java12.projectsalemanagement.product.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
+
 
 @RestController
+@RequestMapping("/api/product")
 public class ProductController {
-    @GetMapping("/product")
-    public Object welcome() {
-        return "welcome to gira app";
+
+
+     private ProductService service;
+
+    public ProductController(@Qualifier("productServiceImpl") ProductService service) {
+        this.service=service;
     }
+
+@GetMapping
+    public Object findAllProduct(){
+    List<Product> products  =service.findAll();
+    return ResponseHandler.getResponse(products, HttpStatus.OK);
+
+}
+    @PostMapping
+    public Object addProduct(@Valid @RequestBody CreateProductDto dto, BindingResult errors) {
+
+        if (errors.hasErrors()) {
+
+            return ResponseHandler.getResponse(errors, HttpStatus.BAD_REQUEST);
+        }
+
+        Product addedProduct = service.addNewProduct(dto);
+
+
+        return ResponseHandler.getResponse(addedProduct, HttpStatus.CREATED);
+    }
+    @DeleteMapping("/{id}")
+    public Object deleteProduct(@PathVariable("id") Long productId) {
+        service.deleteById(productId);
+        return ResponseHandler.getResponse(HttpStatus.OK);
+    }
+    @PutMapping
+    public Object updateProduct(@Valid @RequestBody UpdateProductDto dto,
+                             BindingResult errors) {
+        if(errors.hasErrors())
+            return ResponseHandler.getResponse(errors, HttpStatus.BAD_REQUEST);
+
+        Product updatedProduct = service.update(dto, dto.getId());
+        return ResponseHandler.getResponse(updatedProduct, HttpStatus.OK);
+    }
+
 }
