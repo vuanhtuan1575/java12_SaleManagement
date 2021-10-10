@@ -30,7 +30,7 @@ public class Category  extends BaseEntity {
     @NotNull
     @Column
     private String Description;
-    @NotNull
+
     @Column
     private String imageUlr;
 

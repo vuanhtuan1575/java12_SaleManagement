@@ -34,7 +34,7 @@ public class User extends BaseEntity {
     @Column
     private String password;
 
-    @NotNull
+
     @Email
     @Column(unique = true)
     private String email;
