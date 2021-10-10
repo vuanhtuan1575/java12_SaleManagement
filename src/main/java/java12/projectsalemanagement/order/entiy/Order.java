@@ -21,7 +21,7 @@ import java.util.Set;
 @Table(name = "talbe_order")
 public class Order extends BaseEntity {
 @Column
-    private float price;
+    private double price;
 @Column
     private int quantity;
 
@@ -33,6 +33,18 @@ public class Order extends BaseEntity {
 
     // relationship user - order 1-N
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable=false)
+    @JoinColumn(name = "user_id")
     private User users;
+
+
+    // helper - relationship product-order N-N
+    public void addProduct(Product product) {
+        products.add(product);
+        product.getOrders().add(this);
+    }
+
+    public void removeProduct(Product product) {
+        products.add(product);
+        product.getOrders().remove(this);
+    }
 }

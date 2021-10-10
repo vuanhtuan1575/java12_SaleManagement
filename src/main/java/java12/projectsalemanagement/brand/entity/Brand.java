@@ -39,9 +39,6 @@ public class Brand extends BaseEntity {
     @ManyToMany(mappedBy = "brands",fetch = FetchType.LAZY)
     private Set<Product> products = new HashSet<>();
 
-
-
-
     // relation categories - brand N-N
     @JsonIgnore
     @Builder.Default

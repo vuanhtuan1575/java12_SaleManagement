@@ -87,15 +87,15 @@ public class Product extends BaseEntity {
 //        cart.getProducts().remove(this);
 //    }
 //
-//    // helper - relationship product-order N-N
-//    public void addOrder(Order order) {
-//        orders.add(order);
-//        order.getProducts().add(this);
-//    }
-//
-//    public void removeOrder(Order order) {
-//        orders.add(order);
-//        order.getProducts().remove(this);
-//    }
+    // helper - relationship product-order N-N
+    public void addOrder(Order order) {
+        orders.add(order);
+        order.getProducts().add(this);
+    }
+
+    public void removeOrder(Order order) {
+        orders.add(order);
+        order.getProducts().remove(this);
+    }
 
 }

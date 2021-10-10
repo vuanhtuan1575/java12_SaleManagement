@@ -19,19 +19,19 @@ import java.util.List;
 @RequestMapping("/api/product")
 public class ProductController {
 
-
-     private ProductService service;
+    private ProductService service;
 
     public ProductController(@Qualifier("productServiceImpl") ProductService service) {
-        this.service=service;
+        this.service = service;
     }
 
-@GetMapping
-    public Object findAllProduct(){
-    List<Product> products  =service.findAll();
-    return ResponseHandler.getResponse(products, HttpStatus.OK);
+    @GetMapping
+    public Object findAllProduct() {
+        List<Product> products = service.findAll();
+        return ResponseHandler.getResponse(products, HttpStatus.OK);
 
-}
+    }
+
     @PostMapping
     public Object addProduct(@Valid @RequestBody CreateProductDto dto, BindingResult errors) {
 
@@ -45,19 +45,33 @@ public class ProductController {
 
         return ResponseHandler.getResponse(addedProduct, HttpStatus.CREATED);
     }
+
     @DeleteMapping("/{id}")
     public Object deleteProduct(@PathVariable("id") Long productId) {
         service.deleteById(productId);
         return ResponseHandler.getResponse(HttpStatus.OK);
     }
+
     @PutMapping
     public Object updateProduct(@Valid @RequestBody UpdateProductDto dto,
-                             BindingResult errors) {
-        if(errors.hasErrors())
+                                BindingResult errors) {
+        if (errors.hasErrors())
             return ResponseHandler.getResponse(errors, HttpStatus.BAD_REQUEST);
 
         Product updatedProduct = service.update(dto, dto.getId());
         return ResponseHandler.getResponse(updatedProduct, HttpStatus.OK);
     }
+
+    // add product into Order
+//    @PostMapping("/add-Order")
+//    public Object addProgram(@Valid @RequestBody AddDto dto,
+//                             BindingResult errors) {
+//        if(errors.hasErrors())
+//            return ResponseHandler.getResponse(errors, HttpStatus.BAD_REQUEST);
+//
+//        Role updatedRole = service.addProgram(dto);
+//
+//        return ResponseHandler.getResponse(updatedRole, HttpStatus.OK);
+//    }
 
 }
