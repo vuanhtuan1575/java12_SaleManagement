@@ -62,7 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/user/create-user").permitAll()
                 .antMatchers("/api/auth/login").permitAll()
                 .antMatchers("/api/auth/logout").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().authenticated();
 //                .and()
 //                .formLogin() // Cho phép người dùng xác thực bằng form login
 //                .defaultSuccessUrl("/hello")
@@ -71,7 +71,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .logout() // Cho phép logout
 //                .permitAll();
 
-                ;
+
+//        http.antMatcher("api/admin/**")
+//                .authorizeRequests()
+//                .antMatchers("api/admin/login")
+//                .permitAll()
+//                .antMatchers("/api/admin/**")
+//                .hasAnyRole("ADMIN","USER")
+//                .anyRequest().authenticated();
 
 
 
