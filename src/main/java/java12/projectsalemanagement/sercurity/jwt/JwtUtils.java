@@ -1,12 +1,14 @@
 package java12.projectsalemanagement.sercurity.jwt;
 
 import java.util.Date;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -33,10 +35,12 @@ public class JwtUtils {
 
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
+                .claim("roles",userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + jwtExpiration))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
+        //.withExpiresAt(new Date(System.currentTimeMillis()+10*60*1000))
     }
 
     public boolean validateJwtToken(String token) {

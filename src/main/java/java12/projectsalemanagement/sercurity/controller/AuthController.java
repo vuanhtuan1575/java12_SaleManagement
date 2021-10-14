@@ -60,17 +60,9 @@ private final UserDetailsServiceImpl service;
 
             SecurityContextHolder.getContext().setAuthentication(auth);
             String token = jwtUtils.generateJwtToken(auth);
-
-
-            Set<Role> role=new HashSet<>();
-
-
-            UserDetails userdetails = service.loadUserByUsername(dto.getUsername());
-           // Set<GrantedAuthority> listRole = service.getAuthorities(role);
-           //Set<GrantedAuthority> role123= userdetails.getAuthorities();
-            //return ResponseEntity.ok(new AuthenticationResponse(token,username1.toString()));
             // log history - AOP
             return ResponseHandler.getResponse(token, HttpStatus.OK);
+
         } catch (Exception e) {
             logger.debug("{} has been logged in with wrong password: {}",dto.getUsername(), e.getMessage() );
         }
