@@ -26,10 +26,10 @@ public class Category  extends BaseEntity {
 
     @NotNull
     @Column
-    private String Name;
+    private String name;
     @NotNull
     @Column
-    private String Description;
+    private String description;
 
     @Column
     private String imageUlr;

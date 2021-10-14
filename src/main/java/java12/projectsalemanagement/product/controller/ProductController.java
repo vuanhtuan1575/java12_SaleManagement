@@ -7,6 +7,7 @@ import java12.projectsalemanagement.product.entity.Product;
 import java12.projectsalemanagement.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -47,7 +48,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public Object deleteProduct(@PathVariable("id") Long productId) {
+    public Object deleteProduct(@PathVariable("id")Long productId) {
         service.deleteById(productId);
         return ResponseHandler.getResponse(HttpStatus.OK);
     }
@@ -74,4 +75,21 @@ public class ProductController {
 //        return ResponseHandler.getResponse(updatedRole, HttpStatus.OK);
 //    }
 
+    @GetMapping("/product-id/{productId}")
+    public Object findByProductId(@PathVariable("productId") Long productId) {
+        Product productToFind = service.findProductById(productId);
+
+        return ResponseHandler.getResponse(productToFind,HttpStatus.OK);
+    }
+//    @GetMapping("/{productName}")
+
+
+
+
+    @GetMapping("/product-name/{productName}")
+    public Object findByProductName(@PathVariable("productName") String productName) {
+        List<Product> productToFind =  service.findProductByName(productName);
+
+        return ResponseHandler.getResponse(productToFind,HttpStatus.OK);
+    }
 }

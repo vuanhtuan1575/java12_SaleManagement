@@ -18,7 +18,10 @@ public interface ProductService {
 
     Product update(UpdateProductDto dto, Long id);
 
+    Product findProductById(Long productId);
+
+    List<Product> findProductByName(String productName);
 
 
-
+    //Product findProductByName(String product);
 }

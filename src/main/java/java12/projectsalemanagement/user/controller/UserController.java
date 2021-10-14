@@ -26,7 +26,7 @@ public class UserController {
         this.service = service;
     }
 
-    @PostMapping
+    @PostMapping("/create-user")
     public Object createUser(@Valid @RequestBody CreateUserDto dto,
                              BindingResult errors) {
         if (errors.hasErrors())

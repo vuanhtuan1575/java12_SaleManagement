@@ -26,9 +26,9 @@ public class Brand extends BaseEntity {
 
     @NotNull
     @Column
-    private String Name;
+    private String name;
     @Column
-    private String Description;
+    private String description;
     @Column
     private String imageUlr;
 
