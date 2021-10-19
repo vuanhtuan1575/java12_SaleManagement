@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
 
 import javax.validation.Valid;
 import java.util.List;
@@ -26,12 +28,11 @@ public class ProductController {
         this.service = service;
     }
 
-    @GetMapping
-    public Object findAllProduct() {
-        List<Product> products = service.findAll();
-        return ResponseHandler.getResponse(products, HttpStatus.OK);
-
-    }
+        @GetMapping
+        public Object findAllProduct() {
+            List<Product> products = service.findAll();
+            return ResponseHandler.getResponse(products, HttpStatus.OK);
+        }
 
     @PostMapping
     public Object addProduct(@Valid @RequestBody CreateProductDto dto, BindingResult errors) {
