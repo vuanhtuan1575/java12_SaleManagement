@@ -46,7 +46,7 @@ private final UserDetailsServiceImpl service;
     }
 
 
-    @PostMapping("/login")
+    @PostMapping("/authenticate")
     public ResponseEntity<?> login(@Valid @RequestBody LoginDto dto, BindingResult errors) {
         if(errors.hasErrors())
             return ResponseHandler.getResponse(errors, HttpStatus.BAD_REQUEST);
