@@ -70,5 +70,10 @@ public class User extends BaseEntity {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @PrimaryKeyJoinColumn
     private Cart cart;
+    //helper
+    public void addRole(Role role) {
+        roles.add(role);
+        role.getUsers().add(this);
+    }
 
 }
