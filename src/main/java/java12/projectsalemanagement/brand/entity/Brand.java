@@ -1,16 +1,29 @@
 package java12.projectsalemanagement.brand.entity;
 
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java12.projectsalemanagement.category.entity.Category;
 import java12.projectsalemanagement.common.entity.BaseEntity;
 import java12.projectsalemanagement.product.entity.Product;
-import lombok.*;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.util.HashSet;
-import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
@@ -26,11 +39,11 @@ public class Brand extends BaseEntity {
 
     @NotNull
     @Column
-    private String Name;
+    private String brandName;
     @Column
     private String Description;
     @Column
-    private String imageUlr;
+    private String urlImage;
 
 
     // relation product - brand n - n
@@ -44,6 +57,8 @@ public class Brand extends BaseEntity {
     @Builder.Default
     @ManyToMany(mappedBy = "brands",fetch = FetchType.LAZY)
     private Set<Category> categories = new HashSet<>();
+
+
 
 
 
