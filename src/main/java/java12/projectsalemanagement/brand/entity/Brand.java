@@ -40,8 +40,9 @@ public class Brand extends BaseEntity {
     @NotNull
     @Column
     private String brandName;
+   
     @Column
-    private String Description;
+    private String description;
     @Column
     private String urlImage;
 

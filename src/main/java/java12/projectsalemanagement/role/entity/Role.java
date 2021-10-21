@@ -20,7 +20,7 @@ import java.util.Set;
 @ToString(exclude = {"products","users"})
 @EqualsAndHashCode(exclude = {"products","users"}, callSuper = false)
 @Entity
-@Table(name = "role")
+@Table(name = "table_role")
 public class Role extends BaseEntity {
     @NotNull
     @Size(min = 3, max = 50)

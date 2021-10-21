@@ -39,4 +39,14 @@ public class ResponseHandler {
 		
 		return new ResponseEntity<Object>(map, status);
 	}
+	
+	public static Object getErrors(Object errors,HttpStatus status) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("content", "");
+		map.put("errors", errors);
+		map.put("timestamp", DateUtils.toString(LocalDateTime.now()));
+		map.put("status", status.value());
+		
+		return new ResponseEntity<Object>(map, status);
+	}
 }
