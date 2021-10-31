@@ -3,7 +3,11 @@ package java12.projectsalemanagement.user.dto;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-//@ConfirmPassword
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class CreateUserDto {
     @NotBlank(message = "{user.username.not-blank}")
     //@UniqueUsername
@@ -18,31 +22,7 @@ public class CreateUserDto {
     @Email(message = "{user.email.valid}")
     //@UniqueEmail
     private String email;
-
-
-
-    public String getUsername() {
-        return username;
-    }
-    public void setUsername(String username) {
-        this.username = username;
-    }
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
-    }
-    public String getConfirmPassword() {
-        return confirmPassword;
-    }
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
-    }
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    
+    @NotBlank(message = "{user.roleName.not-blank}")
+    private String roleName;
 }

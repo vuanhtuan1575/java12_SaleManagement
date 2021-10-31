@@ -13,5 +13,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 //    Optional<User> findByUsernameWithGroups(String username);
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.roles WHERE u.username = ?1")
     Optional<User> findByUsernameWithRoles(String username);
+    
+    Optional<User> findByUsernameOrEmail(String username, String email);
+    
+    Optional<User> findByUsername(String username);
 
 }

@@ -1,6 +1,5 @@
 package java12.projectsalemanagement.sercurity.config;
 
-import java12.projectsalemanagement.sercurity.jwt.JwtAuthorizationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -15,10 +14,17 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import com.google.common.collect.ImmutableList;
+
+import java12.projectsalemanagement.sercurity.jwt.JwtAuthorizationFilter;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter{
     @Autowired
     @Qualifier("userDetailsServiceImpl")
     private UserDetailsService userDetailsService;
@@ -29,6 +35,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+    @Bean
+    protected CorsConfigurationSource corsConfigurationSource() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        return source;
     }
 
     @Bean
@@ -42,11 +54,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService)
                 .passwordEncoder(getPasswordEncoder());
     }
+    
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // cấu hình CORS
-        http.cors();
+    	http.cors();
 
         // cấu hình session
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -57,28 +70,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // disable csrf
         http.csrf().disable();
 
-        // cấu hình xác thực cho các api
-        http.antMatcher("/api/**").authorizeRequests()
-                .antMatchers("/api/user/create-user").permitAll()
-                .antMatchers("/api/auth/authenticate").permitAll()
-                .antMatchers("/api/user/getAll-user").permitAll()
-                .anyRequest().authenticated();
-//                .and()
-//                .formLogin() // Cho phép người dùng xác thực bằng form login
-//                .defaultSuccessUrl("/hello")
-//                .permitAll() // Tất cả đều được truy cập vào địa chỉ này
-//                .and()
-//                .logout() // Cho phép logout
-//                .permitAll();
+		// cấu hình xác thực cho các api
+		http.antMatcher("/api/**").authorizeRequests()
+			.antMatchers("/api/auth/authenticate").permitAll()
+			.antMatchers("/api/admin/**").access("hasRole('ROLE_ADMIN')")
+			.anyRequest().permitAll();
 
-
-//        http.antMatcher("api/admin/**")
-//                .authorizeRequests()
-//                .antMatchers("api/admin/login")
-//                .permitAll()
-//                .antMatchers("/api/admin/**")
-//                .hasAnyRole("ADMIN","USER")
-//                .anyRequest().authenticated();
 
 
 

@@ -18,6 +18,9 @@ public class CreateBrandDto {
 	 private String description;
 	 @NotBlank
 	 private String urlImage;
+	 
+	 @NotBlank
+	 private Long[] idCategorys;
 
 	
 	 

@@ -13,27 +13,22 @@ import java.util.Set;
 
 @Getter
 @Setter
-@Data
-@Builder
 @NoArgsConstructor
+@Builder
 @AllArgsConstructor
-@ToString(exclude = {"products","users"})
-@EqualsAndHashCode(exclude = {"products","users"}, callSuper = false)
 @Entity
 @Table(name = "table_role")
 public class Role extends BaseEntity {
-    @NotNull
-    @Size(min = 3, max = 50)
-    @Column(unique = true)
-    private String name;
-    @Column
-    private String description;
+	@NotNull
+	@Size(min = 3, max = 50)
+	@Column(unique = true)
+	private String name;
+	@Column
+	private String description;
 
-
-
-    //relationship user - role N-N
-    @JsonIgnore
-    @Builder.Default
-    @ManyToMany(mappedBy = "roles",fetch = FetchType.LAZY)
-    private Set<User> users = new HashSet<>();
+	// relationship user - role N-N
+	@JsonIgnore
+	@Builder.Default
+	@ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+	private Set<User> users = new HashSet<>();
 }

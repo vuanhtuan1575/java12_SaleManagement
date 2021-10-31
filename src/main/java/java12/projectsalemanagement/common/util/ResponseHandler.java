@@ -49,4 +49,12 @@ public class ResponseHandler {
 		
 		return new ResponseEntity<Object>(map, status);
 	}
+	
+	public static Map<String, Object> ResponseCommon(int StatusCode, String message, Object result) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("statusCode", StatusCode);
+		map.put("Massage", message);
+		map.put("result", result);
+		return map;
+	}
 }

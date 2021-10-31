@@ -1,17 +1,17 @@
 package java12.projectsalemanagement.category.service;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
 import java12.projectsalemanagement.category.dto.CreateCategoryDto;
 import java12.projectsalemanagement.category.dto.UpdateCategoryDto;
 import java12.projectsalemanagement.category.entity.Category;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public interface CategoryService {
-    List<Category> findAll();
+	 ResponseEntity<Object> findAll();
 
-    Category addNewCategory(CreateCategoryDto dto);
+    ResponseEntity<Object> addNewCategory(CreateCategoryDto dto);
 
     void deleteById(Long categoryId);
 

@@ -1,20 +1,19 @@
 package java12.projectsalemanagement.product.service;
 
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+
 import java12.projectsalemanagement.product.dto.CreateProductDto;
 import java12.projectsalemanagement.product.dto.UpdateProductDto;
 import java12.projectsalemanagement.product.entity.Product;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
-@Qualifier("productService")
-@Service
 public interface ProductService {
-    List<Product> findAll();
+	ResponseEntity<Object> findAll();
 
-   Product addNewProduct(CreateProductDto dto);
+   ResponseEntity<Object> addNewProduct(CreateProductDto dto);
 
-    void deleteById(Long productId);
+   ResponseEntity<Object> deleteById(Long productId);
 
     Product update(UpdateProductDto dto, Long id);
 

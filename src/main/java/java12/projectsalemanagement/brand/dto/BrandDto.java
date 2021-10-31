@@ -1,7 +1,8 @@
 package java12.projectsalemanagement.brand.dto;
 
+import java.util.List;
 
-
+import java12.projectsalemanagement.category.entity.Category;
 
 public interface BrandDto {
 
@@ -17,5 +18,7 @@ public interface BrandDto {
 	public String getUrlImage();
 
 	public void setUrlImage();
+	
+	public List<Category> getCategorys();
 	 
 }
