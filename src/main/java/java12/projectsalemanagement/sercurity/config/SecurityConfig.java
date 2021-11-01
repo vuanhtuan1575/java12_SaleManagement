@@ -1,5 +1,8 @@
 package java12.projectsalemanagement.sercurity.config;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -15,10 +18,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import com.google.common.collect.ImmutableList;
+import org.springframework.web.filter.CorsFilter;
 
 import java12.projectsalemanagement.sercurity.jwt.JwtAuthorizationFilter;
 
@@ -36,12 +37,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     public PasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    @Bean
-    protected CorsConfigurationSource corsConfigurationSource() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
-        return source;
-    }
 
     @Bean
     @Override
@@ -55,11 +50,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .passwordEncoder(getPasswordEncoder());
     }
     
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(Boolean.TRUE);
+//        config.addAllowedOrigin("*"); // NOSONAR
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        config.setAllowedOriginPatterns(Arrays.asList(new String[] { "*" }));
+        config.setExposedHeaders(Arrays.asList("Content-Disposition"));
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
+    }
+    
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // cấu hình CORS
-    	http.cors();
+    	http.csrf().disable().cors();
 
         // cấu hình session
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -67,17 +76,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         // thêm filter để validate jwt token
         http.addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
-        // disable csrf
-        http.csrf().disable();
 
 		// cấu hình xác thực cho các api
 		http.antMatcher("/api/**").authorizeRequests()
 			.antMatchers("/api/auth/authenticate").permitAll()
 			.antMatchers("/api/admin/**").access("hasRole('ROLE_ADMIN')")
 			.anyRequest().permitAll();
-
-
-
-
     }
 }
