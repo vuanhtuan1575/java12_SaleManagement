@@ -1,7 +1,6 @@
 package java12.projectsalemanagement.brand.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -16,12 +15,13 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java12.projectsalemanagement.brand.dto.BrandDto;
 import java12.projectsalemanagement.brand.dto.CreateBrandDto;
+import java12.projectsalemanagement.brand.dto.UpdateBrandDto;
 import java12.projectsalemanagement.brand.service.BrandService;
 import java12.projectsalemanagement.common.util.ResponseHandler;
 
@@ -57,7 +57,7 @@ public class BrandController {
 	public ResponseEntity<Object> findAllBrand() {
 
 		return ResponseEntity.status(HttpStatus.OK)
-				.body(ResponseHandler.ResponseCommon(200, "Get all brand success", service.findAllDto()));
+				.body(service.findAllDto());
 	}
 
 	@DeleteMapping(value = "/{id}")
@@ -71,5 +71,18 @@ public class BrandController {
 	public Object findBrandById(@PathVariable long id) {
 
 		return service.findBrandById(id);
+	}
+	
+	
+	@PutMapping(value = "/{id}")
+	public ResponseEntity<Object> updateBrand(@PathVariable long id, @RequestBody UpdateBrandDto dto){
+		
+		try {
+			return service.updateBrand(id, dto);
+		} catch (Exception e) {
+	 Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(500, "INTERNAL_SERVER_ERROR", false);
+	 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseCommon);
+			
+		}
 	}
 }

@@ -5,15 +5,14 @@ import org.springframework.stereotype.Service;
 
 import java12.projectsalemanagement.category.dto.CreateCategoryDto;
 import java12.projectsalemanagement.category.dto.UpdateCategoryDto;
-import java12.projectsalemanagement.category.entity.Category;
 
 @Service
 public interface CategoryService {
-	 ResponseEntity<Object> findAll();
+	ResponseEntity<Object> findAll();
 
     ResponseEntity<Object> addNewCategory(CreateCategoryDto dto);
 
-    void deleteById(Long categoryId);
+    ResponseEntity<Object> deleteCategory(Long categoryId);
 
-    Category update(UpdateCategoryDto dto, Long id);
+    ResponseEntity<Object> updateCategory(long id, UpdateCategoryDto dto);
 }

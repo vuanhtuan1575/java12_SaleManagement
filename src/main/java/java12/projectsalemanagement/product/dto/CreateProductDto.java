@@ -20,5 +20,6 @@ public class CreateProductDto {
 	private double price;
 	private String trademark;
 	private Long brandId;
+	private Long categoryId;
 
 }

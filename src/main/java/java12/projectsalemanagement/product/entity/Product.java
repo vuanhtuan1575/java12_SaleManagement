@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java12.projectsalemanagement.brand.entity.Brand;
 import java12.projectsalemanagement.cart.entity.Cart;
+import java12.projectsalemanagement.category.entity.Category;
 import java12.projectsalemanagement.common.entity.BaseEntity;
 import java12.projectsalemanagement.order.entiy.Order;
 import lombok.AllArgsConstructor;
@@ -70,7 +71,13 @@ public class Product extends BaseEntity {
 	@JoinColumn(name = "brand_id", nullable = false)
 	private Brand brand;
 
-//
+	// relation product-Category one to many
+	 @ManyToOne
+	    @JoinColumn(name="category_id", nullable=false)
+	    private Category category;
+
+	
+	
 	// helper - relationship product-order N-N
 	public void addOrder(Order order) {
 		orders.add(order);

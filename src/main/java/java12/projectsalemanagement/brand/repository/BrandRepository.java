@@ -9,11 +9,16 @@ import org.springframework.stereotype.Repository;
 
 import java12.projectsalemanagement.brand.dto.BrandDto;
 import java12.projectsalemanagement.brand.entity.Brand;
+import java12.projectsalemanagement.category.entity.Category;
+
 @Repository
 public interface BrandRepository extends JpaRepository<Brand, Long> {
 
 	@Query("SELECT b FROM Brand b")
 	public List<BrandDto> findAllBrandDto();
+
 	@Query("SELECT b FROM Brand b WHERE id=?1")
 	public Optional<BrandDto> findBrandById(long id);
+
+	public List<Brand> findByCategorys(Category category);
 }

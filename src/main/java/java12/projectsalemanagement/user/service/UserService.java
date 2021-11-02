@@ -1,18 +1,22 @@
 package java12.projectsalemanagement.user.service;
 
-import java.util.List;
+import org.springframework.http.ResponseEntity;
 
-import java12.projectsalemanagement.user.dto.AddRoleDto;
 import java12.projectsalemanagement.user.dto.CreateUserDto;
-import java12.projectsalemanagement.user.enitty.User;
+import java12.projectsalemanagement.user.dto.UpdateUserDto;
 
 
 public interface UserService {
-    Object createUser(CreateUserDto dto);
+	ResponseEntity<Object> createUser(CreateUserDto dto);
 
-    List<User> findAll();
+    ResponseEntity<Object> findAll();
 
-    User addRole(AddRoleDto dto);
-    Object deleteUser(long id);
-    Object findUserById(long id);
+    ResponseEntity<Object> deleteUser(long id);
+    
+    ResponseEntity<Object> findUserById(long id);
+    
+    ResponseEntity<Object> updateUser(long id, UpdateUserDto dto);
+    
+    ResponseEntity<Object> deactiveUser(long id);
+    ResponseEntity<Object> activeUser(long id);
 }

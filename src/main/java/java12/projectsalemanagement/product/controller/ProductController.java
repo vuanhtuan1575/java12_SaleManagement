@@ -1,26 +1,28 @@
 package java12.projectsalemanagement.product.controller;
 
-import java12.projectsalemanagement.common.util.ResponseHandler;
-import java12.projectsalemanagement.product.dto.CreateProductDto;
-import java12.projectsalemanagement.product.dto.UpdateProductDto;
-import java12.projectsalemanagement.product.entity.Product;
-import java12.projectsalemanagement.product.service.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.repository.query.Param;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import java.util.Map;
 
 import javax.validation.Valid;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java12.projectsalemanagement.common.util.Constants;
+import java12.projectsalemanagement.common.util.ResponseHandler;
+import java12.projectsalemanagement.product.dto.CreateProductDto;
+import java12.projectsalemanagement.product.dto.UpdateProductDto;
+import java12.projectsalemanagement.product.service.ProductService;
 
 @RestController
 @RequestMapping("/api/product")
@@ -37,10 +39,8 @@ public class ProductController {
 		try {
 			return service.findAll();
 		} catch (Exception e) {
-			Map<String, Object> map = new HashMap<>();
-			map.put("statusCode", 500);
-			map.put("message", "INTERNAL_SERVER_ERROR");
-			return ResponseHandler.getResponse(map, HttpStatus.INTERNAL_SERVER_ERROR);
+			Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(500, Constants.INTERNAL_SERVER_ERROR, false);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseCommon);
 
 		}
 	}
@@ -56,10 +56,8 @@ public class ProductController {
 			}
 			return service.addNewProduct(dto);
 		} catch (Exception e) {
-			Map<String, Object> map = new HashMap<>();
-			map.put("statusCode", 500);
-			map.put("message", "INTERNAL_SERVER_ERROR");
-			return ResponseHandler.getResponse(map, HttpStatus.INTERNAL_SERVER_ERROR);
+			Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(500, Constants.INTERNAL_SERVER_ERROR, false);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseCommon);
 		}
 
 	}
@@ -70,48 +68,37 @@ public class ProductController {
 		try {
 			return service.deleteById(productId);
 		} catch (Exception e) {
-			Map<String, Object> map = new HashMap<>();
-			map.put("statusCode", 500);
-			map.put("message", "INTERNAL_SERVER_ERROR");
-			return ResponseHandler.getResponse(map, HttpStatus.INTERNAL_SERVER_ERROR);
+			Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(500, Constants.INTERNAL_SERVER_ERROR, false);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseCommon);
 		}
 
 	}
 
-	@PutMapping
+	@PutMapping(value = "/{id}")
 	@Secured("ROLE_ADMIN")
-	public Object updateProduct(@Valid @RequestBody UpdateProductDto dto, BindingResult errors) {
-		if (errors.hasErrors())
-			return ResponseHandler.getResponse(errors, HttpStatus.BAD_REQUEST);
+	public ResponseEntity<Object> updateProduct(@PathVariable(value = "id") Long id ,@Valid @RequestBody UpdateProductDto dto, BindingResult errors) {
+		try {
+			if (errors.hasErrors())
+				return ResponseHandler.getResponse(errors, HttpStatus.BAD_REQUEST);
 
-		Product updatedProduct = service.update(dto, dto.getId());
-		return ResponseHandler.getResponse(updatedProduct, HttpStatus.OK);
+			return service.updateProduct(id, dto);
+		}catch (Exception e) {
+			Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(500, Constants.INTERNAL_SERVER_ERROR, false);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseCommon);
+		}
+		
 	}
 
-	// add product into Order
-//    @PostMapping("/add-Order")
-//    public Object addProgram(@Valid @RequestBody AddDto dto,
-//                             BindingResult errors) {
-//        if(errors.hasErrors())
-//            return ResponseHandler.getResponse(errors, HttpStatus.BAD_REQUEST);
-//
-//        Role updatedRole = service.addProgram(dto);
-//
-//        return ResponseHandler.getResponse(updatedRole, HttpStatus.OK);
-//    }
-
-	@GetMapping("/product-id/{productId}")
+	@GetMapping("/{productId}")
 	public Object findByProductId(@PathVariable("productId") Long productId) {
-		Product productToFind = service.findProductById(productId);
 
-		return ResponseHandler.getResponse(productToFind, HttpStatus.OK);
+		try {
+			return service.findProductById(productId);
+		} catch (Exception e) {
+			Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(500, Constants.INTERNAL_SERVER_ERROR, false);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseCommon);
+		}
+
 	}
-//    @GetMapping("/{productName}")
 
-	@GetMapping("/product-name/{productName}")
-	public Object findByProductName(@PathVariable("productName") String productName) {
-		List<Product> productToFind = service.findProductByName(productName);
-
-		return ResponseHandler.getResponse(productToFind, HttpStatus.OK);
-	}
 }

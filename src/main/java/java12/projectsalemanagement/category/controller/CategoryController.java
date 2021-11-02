@@ -1,7 +1,6 @@
 package java12.projectsalemanagement.category.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java12.projectsalemanagement.category.dto.CreateCategoryDto;
 import java12.projectsalemanagement.category.dto.UpdateCategoryDto;
-import java12.projectsalemanagement.category.entity.Category;
 import java12.projectsalemanagement.category.service.CategoryService;
 import java12.projectsalemanagement.common.util.ResponseHandler;
 
@@ -50,18 +48,18 @@ public class CategoryController {
 
 	@PostMapping
 	@Secured("ROLE_ADMIN")
-	public Object addCategory(@Valid @RequestBody CreateCategoryDto dto, BindingResult errors) {
+	public ResponseEntity<Object> addCategory(@Valid @RequestBody CreateCategoryDto dto, BindingResult errors) {
 		try {
 
 			if (errors.hasErrors()) {
 
-				return ResponseHandler.getResponse(errors, HttpStatus.BAD_REQUEST);
+				return service.addNewCategory(dto);
 			}
 
 			return service.addNewCategory(dto);
 		} catch (Exception e) {
 			Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(500, "INTERNAL_SERVER_ERROR", null);
-			return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseCommon);
 		}
 
 	}
@@ -69,17 +67,26 @@ public class CategoryController {
 	@DeleteMapping("/{id}")
 	@Secured("ROLE_ADMIN")
 	public Object deleteCategory(@PathVariable("id") Long categoryId) {
-		service.deleteById(categoryId);
-		return ResponseHandler.getResponse(HttpStatus.OK);
+		try {
+			return service.deleteCategory(categoryId);
+		} catch (Exception e) {
+		}
+		Map<String, Object> map = new HashMap<>();
+		map.put("statusCode", 500);
+		map.put("message", "INTERNAL_SERVER_ERROR");
+		return ResponseHandler.getResponse(map, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	@PutMapping
+	@PutMapping("/{id}")
 	@Secured("ROLE_ADMIN")
-	public Object updateCategory(@Valid @RequestBody UpdateCategoryDto dto, BindingResult errors) {
-		if (errors.hasErrors())
-			return ResponseHandler.getResponse(errors, HttpStatus.BAD_REQUEST);
+	public ResponseEntity<Object> updateCategory(@PathVariable Long id,@Valid @RequestBody UpdateCategoryDto dto) {
+		try {
+			return service.updateCategory(id, dto);
+		} catch (Exception e) {
 
-		Category updatedCategory = service.update(dto, dto.getId());
-		return ResponseHandler.getResponse(updatedCategory, HttpStatus.OK);
+			Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(500, "INTERNAL_SERVER_ERROR", null);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseCommon);
+		}
 	}
+
 }

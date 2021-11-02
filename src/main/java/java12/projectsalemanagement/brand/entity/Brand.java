@@ -2,6 +2,7 @@ package java12.projectsalemanagement.brand.entity;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -35,13 +36,13 @@ public class Brand extends BaseEntity {
 
 	private String urlImage;
 
-	@ManyToMany
-	@JoinTable(name = "brand_category", joinColumns = @JoinColumn(name = "brand_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+	@ManyToMany()
+	@JoinTable(name = "brand_category", joinColumns = @JoinColumn(name = "brand_id"), inverseJoinColumns = @JoinColumn(name = "category_id", nullable = true))
 	Set<Category> categorys;
 
 	// one to many product
 	@JsonIgnore
-	@OneToMany(mappedBy = "brand")
+	@OneToMany(mappedBy = "brand" , cascade = CascadeType.ALL)
 	private Set<Product> products;
 
 }

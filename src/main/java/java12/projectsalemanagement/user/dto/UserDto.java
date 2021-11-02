@@ -1,21 +1,38 @@
 package java12.projectsalemanagement.user.dto;
 
+import java.time.LocalDateTime;
+import java.util.Set;
+
 import java12.projectsalemanagement.user.util.UserStatus;
 
 public interface UserDto {
-	public String getUsername();
+
+	public long getId();
 	
+	public String getCreatedBy();
+	
+	public LocalDateTime getCreateAt();
+
+	public String getUpdatedBy();
+	
+	public LocalDateTime getUpdatedAt();
+	
+	public String getUsername();
+
 	public String getEmail();
 
-	public String getFullname();
+	public String getPhone();
 
-	public String getAvatar();
+	public String getName();
 
 	public UserStatus getStatus();
 
-	public String getFacebook();
+	public Set<RoleDto> getRoles();
 
+	interface RoleDto {
+		public long getId();
 
-
+		public String getName();
+	}
 
 }

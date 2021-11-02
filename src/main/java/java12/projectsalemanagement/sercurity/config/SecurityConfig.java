@@ -1,6 +1,5 @@
 package java12.projectsalemanagement.sercurity.config;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
