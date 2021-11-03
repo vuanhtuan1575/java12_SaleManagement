@@ -52,7 +52,7 @@ public class UserController {
 	}
 
 	@PostMapping
-//	@Secured("ROLE_ADMIN")
+	@Secured("ROLE_ADMIN")
 	public ResponseEntity<Object> createUser(@Valid @RequestBody CreateUserDto dto) {
 
 		try {

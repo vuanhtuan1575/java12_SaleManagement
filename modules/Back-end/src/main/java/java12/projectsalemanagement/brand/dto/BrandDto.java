@@ -20,6 +20,8 @@ public interface BrandDto {
 		String getDescription();
 
 		String getImageUrl();
+		
+		Long getId();
 	}
 
 	public Long getId();
