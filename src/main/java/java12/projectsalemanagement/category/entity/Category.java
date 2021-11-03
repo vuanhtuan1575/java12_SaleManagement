@@ -34,7 +34,7 @@ public class Category  extends BaseEntity {
     @NotNull
     private String description;
     
-    private String imageUlr;
+    private String imageUrl;
     
     @JsonIgnore
     @ManyToMany(mappedBy = "categorys")

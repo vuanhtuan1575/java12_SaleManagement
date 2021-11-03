@@ -1,18 +1,32 @@
 package java12.projectsalemanagement.product.dto;
 
-import java.util.List;
-
-import java12.projectsalemanagement.category.entity.Category;
 
 public interface ProductDto {
-public String getProductName();
 	
 
 	public String getDescription();
 
-	public String getUrlImage();
+	public String getimageUlr();
 
 	public Long getId();
 	
+	public String getName();
+	
+	public String getPrice();
+	
+	public String getTrademark();
+	
+	public BrandDto getBrand();
+	
+	public CategoryDto getCategory();
+	
+	interface BrandDto {
+		public String getId();
+		public String getBrandName();
+	}
+	interface CategoryDto {
+		public String getId();
+		public String getName();
+	}
 	
 }

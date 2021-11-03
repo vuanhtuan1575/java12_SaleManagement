@@ -8,14 +8,13 @@ import lombok.Setter;
 public class UpdateCategoryDto {
 	private String name;
 	private String description;
-	private String imageUlr;
+	private String imageUrl;
 	private Long[] brandIds;
 
-	public UpdateCategoryDto(Long id, String name, String description, String imageUlr, Long[] brandIds) {
+	public UpdateCategoryDto(Long id, String name, String description, String imageUrl, Long[] brandIds) {
 		this.name = name;
 		this.description = description;
-		this.imageUlr = imageUlr;
-		this.imageUlr = imageUlr;
+		this.imageUrl = imageUrl;
 		this.brandIds = brandIds;
 	}
 

@@ -1,6 +1,5 @@
 package java12.projectsalemanagement.brand.service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java12.projectsalemanagement.brand.dto.BrandDto;
@@ -20,6 +20,7 @@ import java12.projectsalemanagement.brand.entity.Brand;
 import java12.projectsalemanagement.brand.repository.BrandRepository;
 import java12.projectsalemanagement.category.entity.Category;
 import java12.projectsalemanagement.category.repository.CategoryRepository;
+import java12.projectsalemanagement.common.util.DateUtils;
 import java12.projectsalemanagement.common.util.ResponseHandler;
 
 @Service
@@ -61,6 +62,8 @@ public class BrandServiceImpl implements BrandService {
 		newBrand.setDescription(dto.getDescription());
 		newBrand.setUrlImage(dto.getUrlImage());
 		newBrand.setCategorys(setCategory);
+		newBrand.setCreateAt(DateUtils.getLocalDateNow());
+		newBrand.setCreatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
 		Brand save = repository.save(newBrand);
 
 		Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(200, "Brand create is success", save);

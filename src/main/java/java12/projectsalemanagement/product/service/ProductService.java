@@ -8,16 +8,12 @@ import java12.projectsalemanagement.product.dto.UpdateProductDto;
 public interface ProductService {
 	ResponseEntity<Object> findAll();
 
-   ResponseEntity<Object> addNewProduct(CreateProductDto dto);
+	ResponseEntity<Object> addNewProduct(CreateProductDto dto);
 
-   ResponseEntity<Object> deleteById(Long productId);
+	ResponseEntity<Object> deleteById(Long productId);
 
-   ResponseEntity<Object> updateProduct(Long id,UpdateProductDto dto);
-
-
+	ResponseEntity<Object> updateProduct(Long id, UpdateProductDto dto);
 
 	ResponseEntity<Object> findProductById(long id);
 
-
-    //Product findProductByName(String product);
 }

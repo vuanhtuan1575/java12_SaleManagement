@@ -34,7 +34,7 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public ResponseEntity<Object> findAll() {
 		return ResponseEntity.status(HttpStatus.OK)
-				.body(ResponseHandler.ResponseCommon(200, "Get all category success", categoryRepository.findAll()));
+				.body(categoryRepository.findBy());
 	}
 
 	@Override
@@ -93,8 +93,8 @@ public class CategoryServiceImpl implements CategoryService {
 		if (dto.getDescription() != null && !StringUtils.isBlank(dto.getDescription())) {
 			opCategory.get().setDescription(dto.getDescription());
 		}
-		if (dto.getImageUlr() != null && !StringUtils.isBlank(dto.getImageUlr())) {
-			opCategory.get().setImageUlr(dto.getImageUlr());
+		if (dto.getImageUrl() != null && !StringUtils.isBlank(dto.getImageUrl())) {
+			opCategory.get().setImageUrl(dto.getImageUrl());
 		}
 		if (!brandSet.isEmpty()) {
 			opCategory.get().setBrands(brandSet);

@@ -1,6 +1,5 @@
 package java12.projectsalemanagement.product.service;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -17,19 +16,21 @@ import java12.projectsalemanagement.category.repository.CategoryRepository;
 import java12.projectsalemanagement.common.util.DateUtils;
 import java12.projectsalemanagement.common.util.ResponseHandler;
 import java12.projectsalemanagement.product.dto.CreateProductDto;
+import java12.projectsalemanagement.product.dto.ProductDto;
 import java12.projectsalemanagement.product.dto.UpdateProductDto;
 import java12.projectsalemanagement.product.entity.Product;
 import java12.projectsalemanagement.product.repository.ProductRepository;
 
 @Service
 public class ProductServiceImpl implements ProductService {
-	
+
 	private ProductRepository productRepository;
 	private BrandRepository brandRepository;
 	private CategoryRepository categoryRepository;
 
 	@Autowired
-	public ProductServiceImpl(ProductRepository productRepository, BrandRepository brandRepository, CategoryRepository categoryRepository) {
+	public ProductServiceImpl(ProductRepository productRepository, BrandRepository brandRepository,
+			CategoryRepository categoryRepository) {
 		this.productRepository = productRepository;
 		this.brandRepository = brandRepository;
 		this.categoryRepository = categoryRepository;
@@ -37,10 +38,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public ResponseEntity<Object> findAll() {
-		List<Product> listProduct = productRepository.findAll();
-		return ResponseEntity.status(HttpStatus.OK)
-				.body(ResponseHandler.ResponseCommon(200, "Get all product success", listProduct));
-
+		return ResponseEntity.status(HttpStatus.OK).body(productRepository.findBy());
 	}
 
 	@Override
@@ -50,11 +48,10 @@ public class ProductServiceImpl implements ProductService {
 		Optional<Category> opCategory = categoryRepository.findById(dto.getCategoryId());
 
 		if (optBrand.isEmpty()) {
-			return ResponseEntity.status(400)
-					.body(ResponseHandler.ResponseCommon(400, "Brand is not exist", optBrand.get()));
+			return ResponseEntity.status(400).body(ResponseHandler.ResponseCommon(400, "Brand is not exist", false));
 		}
-		if(opCategory.isEmpty()) {
-			return ResponseEntity.status(400).body(ResponseHandler.ResponseCommon(404, "Category is not exist", optBrand.get()));
+		if (opCategory.isEmpty()) {
+			return ResponseEntity.status(400).body(ResponseHandler.ResponseCommon(404, "Category is not exist", false));
 		}
 
 		Product newProduct = new Product();
@@ -91,71 +88,53 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public ResponseEntity<Object> updateProduct(Long id, UpdateProductDto dto) {
 		Optional<Product> opProduct = productRepository.findById(id);
-		if(opProduct.isEmpty()) {
+		if (opProduct.isEmpty()) {
 			Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(400, "Product not exist", false);
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
 		}
-		if(dto.getCategoryId()!= null) {
+		if (dto.getCategoryId() != null) {
 			Optional<Category> opCategory = categoryRepository.findById(dto.getCategoryId());
-			if(opCategory.isEmpty()) {
+			if (opCategory.isEmpty()) {
 				Map<String, Object> responseError = ResponseHandler.ResponseCommon(400, "Category not exist", false);
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseError);
 			}
 			opProduct.get().setCategory(opCategory.get());
 		}
-		
-		if(dto.getBrandId()!= null) {
+
+		if (dto.getBrandId() != null) {
 			Optional<Brand> optBrand = brandRepository.findById(dto.getBrandId());
-			if(optBrand.isEmpty()) {
+			if (optBrand.isEmpty()) {
 				Map<String, Object> responseError = ResponseHandler.ResponseCommon(400, "Brand not exist", false);
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseError);
 			}
 			opProduct.get().setBrand(optBrand.get());
 		}
-		
+
 		opProduct.get().setDescription(dto.getDescription());
 		opProduct.get().setImageUlr(dto.getImageUlr());
 		opProduct.get().setName(dto.getName());
 		opProduct.get().setPrice(dto.getPrice());
 		opProduct.get().setTrademark(dto.getTrademark());
 		opProduct.get().setReview(dto.getReview());
-		opProduct.get().setVersion(opProduct.get().getVersion()+1);
+		opProduct.get().setVersion(opProduct.get().getVersion() + 1);
 		opProduct.get().setUpdatedAt(DateUtils.getLocalDateNow());
 		opProduct.get().setUpdatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
 		Product productSave = productRepository.save(opProduct.get());
 		Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(200, "Product update success", productSave);
 		return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
-		
-		
 
 	}
 
 	@Override
 	public ResponseEntity<Object> findProductById(long id) {
-		Optional<Product> opProduct = productRepository.findById(id);
-		if(opProduct.isEmpty()) {
+		Optional<ProductDto> opProduct = productRepository.findProductById(id);
+		if (opProduct.isEmpty()) {
 			Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(404, "Product is not exist", false);
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
 		}
-		Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(200, "Product find success",opProduct.get());
+		Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(200, "Product find success",
+				opProduct.get());
 		return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
 	}
-
-
-
-//    @Override
-//    public List<Product> findProductById(Long productId) {
-//        return productRepository.findProductById(productId);
-//    }
-//
-//    @Override
-//    public List<Product> findProductByName(String productName) {
-//        return productRepository.findProductByName(productName);
-//    }
-
-//    @Override
-//    public Product findProductByName(String product) {
-//        return pro=productRepository.findProductByName(product);
-//    }
 
 }
