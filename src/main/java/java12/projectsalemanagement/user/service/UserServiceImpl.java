@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
 		// Find Role
 		Optional<Role> optRole = roleRepository.findByName(dto.getRoleName());
 
-		if (optRole.isEmpty()) {
+		if (!optRole.isPresent()) {
 			Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(400, "Role is not exist", false);
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
 		}
@@ -124,7 +124,7 @@ public class UserServiceImpl implements UserService {
 	public ResponseEntity<Object> updateUser(long id, UpdateUserDto dto) {
 
 		Optional<User> opUser = repository.findById(id);
-		if (opUser.isEmpty()) {
+		if (!opUser.isPresent()) {
 			Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(400, "User not exist", false);
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
 		}
@@ -156,7 +156,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public ResponseEntity<Object> deactiveUser(long id) {
 		Optional<User> opUser = repository.findById(id);
-		if (opUser.isEmpty()) {
+		if (!opUser.isPresent()) {
 			Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(400, "User not exist", false);
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
 		}
@@ -173,7 +173,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public ResponseEntity<Object> activeUser(long id) {
 		Optional<User> opUser = repository.findById(id);
-		if (opUser.isEmpty()) {
+		if (!opUser.isPresent()) {
 			Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(400, "User not exist", false);
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
 		}
@@ -190,7 +190,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public ResponseEntity<Object> addCart(long productId, HttpServletRequest request, int valueCart) {
 		Optional<Product> opPro = productRepository.findById(productId);
-		if (opPro.isEmpty()) {
+		if (!opPro.isPresent()) {
 			Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(404, "Product is not exist", false);
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
 		}

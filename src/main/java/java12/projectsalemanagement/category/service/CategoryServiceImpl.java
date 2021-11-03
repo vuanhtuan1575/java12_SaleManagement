@@ -55,7 +55,7 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public ResponseEntity<Object> deleteCategory(Long categoryId) {
 		Optional<Category> opCategory = categoryRepository.findById(categoryId);
-		if (opCategory.isEmpty()) {
+		if (!opCategory.isPresent()) {
 			Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(404, "Category is not exist", false);
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
 		}
@@ -72,7 +72,7 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public ResponseEntity<Object> updateCategory(long id, UpdateCategoryDto dto) {
 		Optional<Category> opCategory = categoryRepository.findById(id);
-		if (opCategory.isEmpty()) {
+		if (!opCategory.isPresent()) {
 			ResponseHandler.ResponseCommon(400, "Category is not exist", false);
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 					.body(ResponseHandler.ResponseCommon(400, "Category is not exist", false));
@@ -81,7 +81,7 @@ public class CategoryServiceImpl implements CategoryService {
 		if (dto.getBrandIds() != null && dto.getBrandIds().length >= 1) {
 			for (Long idCategoty : dto.getBrandIds()) {
 				Optional<Brand> opBrand = brandCategory.findById(idCategoty);
-				if (opBrand.isEmpty()) {
+				if (!opBrand.isPresent()) {
 					Map<String, Object> responseError = ResponseHandler.ResponseCommon(400, "Brand is not exist",
 							false);
 					return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseError);

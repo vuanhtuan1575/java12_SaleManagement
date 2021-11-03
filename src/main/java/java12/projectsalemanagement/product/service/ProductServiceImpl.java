@@ -47,10 +47,10 @@ public class ProductServiceImpl implements ProductService {
 		Optional<Brand> optBrand = brandRepository.findById(dto.getBrandId());
 		Optional<Category> opCategory = categoryRepository.findById(dto.getCategoryId());
 
-		if (optBrand.isEmpty()) {
+		if (!optBrand.isPresent()) {
 			return ResponseEntity.status(400).body(ResponseHandler.ResponseCommon(400, "Brand is not exist", false));
 		}
-		if (opCategory.isEmpty()) {
+		if (!opCategory.isPresent()) {
 			return ResponseEntity.status(400).body(ResponseHandler.ResponseCommon(404, "Category is not exist", false));
 		}
 
@@ -76,7 +76,7 @@ public class ProductServiceImpl implements ProductService {
 
 		Optional<Product> opPro = productRepository.findById(productId);
 		// Check product is exist
-		if (opPro.isEmpty()) {
+		if (!opPro.isPresent()) {
 			Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(404, "Product is not exist", false);
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
 		}
@@ -88,13 +88,13 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public ResponseEntity<Object> updateProduct(Long id, UpdateProductDto dto) {
 		Optional<Product> opProduct = productRepository.findById(id);
-		if (opProduct.isEmpty()) {
+		if (!opProduct.isPresent()) {
 			Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(400, "Product not exist", false);
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
 		}
 		if (dto.getCategoryId() != null) {
 			Optional<Category> opCategory = categoryRepository.findById(dto.getCategoryId());
-			if (opCategory.isEmpty()) {
+			if (!opCategory.isPresent()) {
 				Map<String, Object> responseError = ResponseHandler.ResponseCommon(400, "Category not exist", false);
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseError);
 			}
@@ -103,7 +103,7 @@ public class ProductServiceImpl implements ProductService {
 
 		if (dto.getBrandId() != null) {
 			Optional<Brand> optBrand = brandRepository.findById(dto.getBrandId());
-			if (optBrand.isEmpty()) {
+			if (!optBrand.isPresent()) {
 				Map<String, Object> responseError = ResponseHandler.ResponseCommon(400, "Brand not exist", false);
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseError);
 			}
@@ -128,7 +128,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public ResponseEntity<Object> findProductById(long id) {
 		Optional<ProductDto> opProduct = productRepository.findProductById(id);
-		if (opProduct.isEmpty()) {
+		if (!opProduct.isPresent()) {
 			Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(404, "Product is not exist", false);
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
 		}

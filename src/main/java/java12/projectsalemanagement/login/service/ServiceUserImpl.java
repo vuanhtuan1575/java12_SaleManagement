@@ -44,7 +44,7 @@ public class ServiceUserImpl implements ServiceLogin {
 	public ResponseEntity<Object> checkLogin(LoginDto loginDto) {
 		Optional<User> opUser = userRepository.findByUsername(loginDto.getUsername());
 		// check usser exist
-		if (opUser.isEmpty()) {
+		if (!opUser.isPresent()) {
 			Map<String, Object> resError = new HashMap<>();
 			resError.put("statusCode", "0000A1");
 			resError.put("message", "Wrong Username or Password");

@@ -32,7 +32,7 @@ public class BrandServiceImpl implements BrandService {
 	public BrandServiceImpl(CategoryRepository categoryRepository, BrandRepository brandRepository) {
 		this.categoryRepository = categoryRepository;
 		this.repository = brandRepository;
-		// encoder = passwordEncoder;
+		// encoder = passwordEncoder;m
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class BrandServiceImpl implements BrandService {
 		Long[] idCategorys = dto.getIdCategorys();
 		for (Long id : idCategorys) {
 			Optional<Category> opCategoty = categoryRepository.findById(id);
-			if (opCategoty.isEmpty()) {
+			if (!opCategoty.isPresent()) {
 				Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(404, "Category is not exist",
 						false);
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
@@ -80,7 +80,7 @@ public class BrandServiceImpl implements BrandService {
 	@Override
 	public ResponseEntity<Object> deleteBrand(long brandId) {
 		Optional<Brand> opBrand = repository.findById(brandId);
-		if (opBrand.isEmpty()) {
+		if (!opBrand.isPresent()) {
 			Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(404, "Brand is not exist", false);
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
 		}
@@ -92,7 +92,7 @@ public class BrandServiceImpl implements BrandService {
 	@Override
 	public ResponseEntity<Object> findBrandById(long id) {
 		Optional<BrandDto> opBrand = repository.findBrandById(id);
-		if (opBrand.isEmpty()) {
+		if (!opBrand.isPresent()) {
 			Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(404, "Brand is not exist", false);
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
 		}
@@ -114,7 +114,7 @@ public class BrandServiceImpl implements BrandService {
 	public ResponseEntity<Object> updateBrand(long id, UpdateBrandDto dto) {
 		
 		Optional<Brand> opBrand = repository.findById(id);
-		if(opBrand.isEmpty()) {
+		if(!opBrand.isPresent()) {
 			Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(400, "Brand not exist", false);
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
 			
@@ -123,7 +123,7 @@ public class BrandServiceImpl implements BrandService {
 		if(dto.getCategoryIds()!= null && dto.getCategoryIds().length>=1) {
 			for (Long idCategoty : dto.getCategoryIds()) {
 				Optional<Category> opCategoty = categoryRepository.findById(idCategoty);
-				if(opCategoty.isEmpty()) {
+				if(!opCategoty.isPresent()) {
 					Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(400, "Category not exist", false);
 					return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
 				} else {
