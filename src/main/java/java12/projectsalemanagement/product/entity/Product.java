@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -17,7 +18,6 @@ import javax.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java12.projectsalemanagement.brand.entity.Brand;
-import java12.projectsalemanagement.cart.entity.Cart;
 import java12.projectsalemanagement.category.entity.Category;
 import java12.projectsalemanagement.common.entity.BaseEntity;
 import java12.projectsalemanagement.order.entiy.Order;
@@ -60,11 +60,9 @@ public class Product extends BaseEntity {
 	@JoinTable(name = "product_order", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "order_id"))
 	private Set<Order> orders = new HashSet<>();
 
-	// relation product-cart N-N
-	@JsonIgnore
-	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	@JoinTable(name = "product_cart", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "cart_id"))
-	private Set<Cart> carts = new HashSet<>();
+	// relation product-cart one to many
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+	Set<ProductUser> quanty;
 
 	// many to one brand
 	@ManyToOne
@@ -72,12 +70,10 @@ public class Product extends BaseEntity {
 	private Brand brand;
 
 	// relation product-Category one to many
-	 @ManyToOne
-	    @JoinColumn(name="category_id", nullable=false)
-	    private Category category;
+	@ManyToOne
+	@JoinColumn(name = "category_id", nullable = false)
+	private Category category;
 
-	
-	
 	// helper - relationship product-order N-N
 	public void addOrder(Order order) {
 		orders.add(order);

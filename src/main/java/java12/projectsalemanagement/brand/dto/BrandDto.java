@@ -5,6 +5,7 @@ import java.util.List;
 public interface BrandDto {
 
 	// spring jpa projection
+	
 	public String getBrandName();
 
 	public String getDescription();
@@ -18,7 +19,7 @@ public interface BrandDto {
 
 		String getDescription();
 
-		String getImageUlr();
+		String getImageUrl();
 	}
 
 	public Long getId();

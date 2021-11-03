@@ -1,5 +1,7 @@
 package java12.projectsalemanagement.user.service;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.http.ResponseEntity;
 
 import java12.projectsalemanagement.user.dto.CreateUserDto;
@@ -19,4 +21,6 @@ public interface UserService {
     
     ResponseEntity<Object> deactiveUser(long id);
     ResponseEntity<Object> activeUser(long id);
+    
+    ResponseEntity<Object> addCart(long productId, HttpServletRequest request, int valueCart);
 }

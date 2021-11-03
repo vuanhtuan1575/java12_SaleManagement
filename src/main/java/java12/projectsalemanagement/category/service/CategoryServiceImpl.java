@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java12.projectsalemanagement.brand.entity.Brand;
@@ -18,6 +19,7 @@ import java12.projectsalemanagement.category.dto.CreateCategoryDto;
 import java12.projectsalemanagement.category.dto.UpdateCategoryDto;
 import java12.projectsalemanagement.category.entity.Category;
 import java12.projectsalemanagement.category.repository.CategoryRepository;
+import java12.projectsalemanagement.common.util.DateUtils;
 import java12.projectsalemanagement.common.util.ResponseHandler;
 
 @Service
@@ -42,6 +44,8 @@ public class CategoryServiceImpl implements CategoryService {
 		Category newCategories = new Category();
 		newCategories.setName(dto.getName());
 		newCategories.setDescription(dto.getDescription());
+		newCategories.setCreateAt(DateUtils.getLocalDateNow());
+		newCategories.setCreatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
 		Category save = categoryRepository.save(newCategories);
 
 		return ResponseEntity.status(HttpStatus.OK)

@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +16,13 @@ import org.springframework.stereotype.Service;
 
 import java12.projectsalemanagement.common.util.DateUtils;
 import java12.projectsalemanagement.common.util.ResponseHandler;
+import java12.projectsalemanagement.product.entity.Product;
+import java12.projectsalemanagement.product.entity.ProductUser;
+import java12.projectsalemanagement.product.repository.ProductRepository;
+import java12.projectsalemanagement.product.repository.ProductUserRepository;
 import java12.projectsalemanagement.role.entity.Role;
 import java12.projectsalemanagement.role.repository.RoleRepository;
+import java12.projectsalemanagement.sercurity.jwt.JwtUtils;
 import java12.projectsalemanagement.user.dto.CreateUserDto;
 import java12.projectsalemanagement.user.dto.UpdateUserDto;
 import java12.projectsalemanagement.user.dto.UserDto;
@@ -29,13 +36,20 @@ public class UserServiceImpl implements UserService {
 	private UserRepository repository;
 	private PasswordEncoder encoder;
 	private RoleRepository roleRepository;
+	private ProductRepository productRepository;
+	private ProductUserRepository productUserRepository;
+	private JwtUtils jwtUtils;
 
 	@Autowired
 	public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder,
-			RoleRepository roleRepository) {
+			ProductRepository productRepository, RoleRepository roleRepository,
+			ProductUserRepository productUserRepository, JwtUtils jwtUtils) {
 		this.repository = userRepository;
 		this.encoder = passwordEncoder;
 		this.roleRepository = roleRepository;
+		this.productRepository = productRepository;
+		this.productUserRepository = productUserRepository;
+		this.jwtUtils = jwtUtils;
 	}
 
 	@Override
@@ -80,7 +94,7 @@ public class UserServiceImpl implements UserService {
 		return ResponseEntity.ok().body(repository.findBy(UserDto.class));
 	}
 
-		@Override
+	@Override
 	public ResponseEntity<Object> deleteUser(long id) {
 		Optional<User> opUser = repository.findById(id);
 		if (!opUser.isPresent()) {
@@ -171,6 +185,50 @@ public class UserServiceImpl implements UserService {
 		repository.save(opUser.get());
 		Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(200, "User active is success", true);
 		return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+	}
+
+	@Override
+	public ResponseEntity<Object> addCart(long productId, HttpServletRequest request, int valueCart) {
+		Optional<Product> opPro = productRepository.findById(productId);
+		if (opPro.isEmpty()) {
+			Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(404, "Product is not exist", false);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+		}
+		String token = jwtUtils.getJwtTokenFromRequest(request);
+		String name = jwtUtils.getUsernameFromToken(token);
+		Optional<User> opUser = repository.findByUsername(name);
+		if (!opUser.isPresent()) {
+			Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(404, "User is not exist", false);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+		}
+		Optional<ProductUser> opProductQuanty = productUserRepository.findByProductAndUser(opPro.get(), opUser.get());
+		if (opProductQuanty.isPresent()) {
+			String message = null;
+			if (valueCart == 0) {
+				opProductQuanty.get().setQuanty(opProductQuanty.get().getQuanty() - 1);
+				message = "Decrease quanty product success";
+				if (opProductQuanty.get().getQuanty() <= 0) {
+					opUser.get().getQuanty().remove(opProductQuanty.get());
+					message = "Remove product success";
+				}
+
+			} else {
+				opProductQuanty.get().setQuanty(opProductQuanty.get().getQuanty() + 1);
+				message = "Decrease quanty product success";
+			}
+			productUserRepository.save(opProductQuanty.get());
+			Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(200, message, true);
+			return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+		}
+
+		ProductUser productQuanty = new ProductUser();
+		productQuanty.setProduct(opPro.get());
+		productQuanty.setQuanty(1);
+		productQuanty.setUser(opUser.get());
+		productUserRepository.save(productQuanty);
+		Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(200, "Add to cart success", true);
+		return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+
 	}
 
 }
