@@ -34,7 +34,9 @@ public class BrandServiceImpl implements BrandService {
 		this.repository = brandRepository;
 		// encoder = passwordEncoder;m
 	}
-
+	/**
+	 * Service create brand & check 
+	 */
 	@Override
 	public ResponseEntity<Object> createBrand(CreateBrandDto dto) {
 		// container category;

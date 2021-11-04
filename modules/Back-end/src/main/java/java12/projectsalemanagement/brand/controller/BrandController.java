@@ -35,7 +35,13 @@ public class BrandController {
 	public BrandController(@Qualifier("brandServiceImpl") BrandService service) {
 		this.service = service;
 	}
-
+	
+	/**
+	 * Create Brand
+	 * @param dto
+	 * @param errors
+	 * @return
+	 */
 	@PostMapping
 	@Secured("ROLE_ADMIN")
 	public ResponseEntity<Object> createBrand(@Valid @RequestBody CreateBrandDto dto, BindingResult errors) {

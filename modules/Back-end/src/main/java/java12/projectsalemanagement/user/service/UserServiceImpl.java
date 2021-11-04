@@ -51,7 +51,11 @@ public class UserServiceImpl implements UserService {
 		this.productUserRepository = productUserRepository;
 		this.jwtUtils = jwtUtils;
 	}
-
+	
+	
+	/**
+	 * Create User and check user, email, role
+	 */
 	@Override
 	public ResponseEntity<Object> createUser(CreateUserDto dto) {
 		// check username exist and email
@@ -88,7 +92,10 @@ public class UserServiceImpl implements UserService {
 		Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(400, "User create is success", true);
 		return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
 	}
-
+	/**
+	 * 
+	 * 
+	 */
 	@Override
 	public ResponseEntity<Object> findAll() {
 		Map<String, Object> responseCommon = ResponseHandler.ResponseCommon(200, "Get All User is success",
